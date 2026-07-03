@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -211,6 +212,9 @@ func runScan(args []string) error {
 
 	comments, err := ag.Run(ctx)
 	if err != nil {
+		if id := ag.SessionID(); id != "" {
+			fmt.Fprintf(os.Stderr, "[ocr] Session: %s\n", id)
+		}
 		telemetry.SetAttr(span, "error", err.Error())
 		return fmt.Errorf("scan failed: %w", err)
 	}
