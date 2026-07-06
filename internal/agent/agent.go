@@ -601,8 +601,7 @@ func (a *Agent) executeSubtask(ctx context.Context, d model.Diff) (bool, string,
 		return false, msg, nil
 	}
 
-	mainAttempted := a.args.Template.MaxToolRequestTimes > 0
-	err := a.runner.RunPerFile(ctx, messages, newPath)
+	mainCompleted, err := a.runner.RunPerFile(ctx, messages, newPath)
 	if err == nil {
 		// REVIEW_FILTER_TASK runs after the main loop and decides which of the
 		// just-collected comments to drop. It needs to see comments produced by
@@ -615,8 +614,8 @@ func (a *Agent) executeSubtask(ctx context.Context, d model.Diff) (bool, string,
 	if err != nil {
 		return false, "", err
 	}
-	if !mainAttempted {
-		return false, "main_task did not run because max tool requests is 0", nil
+	if !mainCompleted {
+		return false, "main_task did not complete before stopping", nil
 	}
 	return true, "", nil
 }
