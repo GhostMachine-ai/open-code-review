@@ -1,0 +1,298 @@
+# Instincts generated from https://github.com/GhostMachine-ai/open-code-review
+# Generated: 2026-07-09T05:44:29.655Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: open-code-review-commit-conventional
+trigger: "when writing a commit message"
+confidence: 0.85
+domain: git
+source: repo-analysis
+source_repo: https://github.com/GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Commit Conventional
+
+## Action
+
+Use conventional commit format with prefixes: feat
+
+## Evidence
+
+- 1 commits analyzed
+- Detected conventional commit pattern
+- Examples: feat(cli): add --progress-stderr for JSON-mode progress logs
+
+---
+id: open-code-review-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Commit Length
+
+## Action
+
+Write moderate-length commit messages (~60 characters)
+
+## Evidence
+
+- Average commit message length: 60 chars
+- Based on 1 commits
+
+---
+id: open-code-review-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Naming Files
+
+## Action
+
+Use snake_case naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: snake_case
+
+---
+id: open-code-review-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: open-code-review-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: open-code-review-instinct-file-naming
+trigger: "When creating a new Go source file"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct File Naming
+
+## Action
+
+Name the file using snake_case
+
+## Evidence
+
+- Pattern in files: file naming conventions specify snake_case
+
+---
+id: open-code-review-instinct-function-naming
+trigger: "When defining a new function in Go"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Function Naming
+
+## Action
+
+Use camelCase for the function name
+
+## Evidence
+
+- Pattern in namingConventions: functions use camelCase
+
+---
+id: open-code-review-instinct-class-naming
+trigger: "When defining a new struct or class in Go"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Class Naming
+
+## Action
+
+Use PascalCase for the struct or class name
+
+## Evidence
+
+- Pattern in namingConventions: classes use PascalCase
+
+---
+id: open-code-review-instinct-constant-naming
+trigger: "When defining a constant in Go"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for the constant name
+
+## Evidence
+
+- Pattern in namingConventions: constants use SCREAMING_SNAKE_CASE
+
+---
+id: open-code-review-instinct-import-style
+trigger: "When importing modules in Go"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in importStyle: relative
+
+---
+id: open-code-review-instinct-export-style
+trigger: "When exporting symbols in Go"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle: named
+
+---
+id: open-code-review-instinct-git-commit-format
+trigger: "When writing a commit message"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Git Commit Format
+
+## Action
+
+Use the conventional commit format with a 'feat' prefix for new features
+
+## Evidence
+
+- Pattern in commits: type is conventional, prefix is 'feat'
+- Example: feat(cli): add --progress-stderr for JSON-mode progress logs
+
+---
+id: open-code-review-instinct-commit-length
+trigger: "When writing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Commit Length
+
+## Action
+
+Keep the commit message around 60 characters on average
+
+## Evidence
+
+- Pattern in commits: averageLength is 60
+
+---
+id: open-code-review-instinct-test-location
+trigger: "When adding new tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Test Location
+
+## Action
+
+Place test files alongside source files (mixed test location)
+
+## Evidence
+
+- Pattern in architecture: testLocation is mixed
+
+---
+id: open-code-review-instinct-folder-usage
+trigger: "When organizing new code or features"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: GhostMachine-ai/open-code-review
+---
+
+# Open Code Review Instinct Folder Usage
+
+## Action
+
+Use or create common folders: cmd, extensions, internal
+
+## Evidence
+
+- Pattern in architecture: commonFolders include cmd, extensions, internal
+
