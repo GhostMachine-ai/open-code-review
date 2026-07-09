@@ -112,6 +112,7 @@ type reviewOptions struct {
 	maxTools       int
 	maxGitProcs    int
 	preview        bool
+	progressStderr bool // --progress-stderr: route progress logs to stderr in JSON mode
 	showHelp       bool
 }
 
@@ -137,6 +138,7 @@ func parseReviewFlags(args []string) (reviewOptions, error) {
 	a.IntVar(&opts.maxTools, "max-tools", 0, "max tool call rounds per file (0 = template default; min 10)")
 	a.IntVar(&opts.maxGitProcs, "max-git-procs", 16, "max concurrent git subprocesses")
 	a.BoolVarP(&opts.preview, "preview", "p", false, "preview which files will be reviewed without running the LLM")
+	a.BoolVar(&opts.progressStderr, "progress-stderr", false, "in --format=json mode, write progress logs to stderr instead of silencing them")
 
 	if err := a.Parse(args); err != nil {
 		return opts, fmt.Errorf("parse flags: %w", err)
@@ -233,6 +235,7 @@ Flags:
   --max-tools int               max tool call rounds per file (0 = template default; min 10)
   --model string                override LLM model for this review (e.g., claude-opus-4-6)
   -p, --preview                 preview which files will be reviewed without running the LLM
+  --progress-stderr             with --format=json, write progress logs to stderr (default: silenced)
   --repo string                 root directory of the git repository (default: current dir)
   --rule string                 path to JSON file with system review rules
   --timeout int                 concurrent task timeout in minutes (default 10)

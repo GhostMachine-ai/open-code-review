@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/open-code-review/open-code-review/internal/config/rules"
+	"github.com/open-code-review/open-code-review/internal/stdout"
 )
 
 func TestApplyCLIExcludes_Empty(t *testing.T) {
@@ -37,7 +38,7 @@ func TestApplyCLIExcludes_NilFileFilter(t *testing.T) {
 }
 
 func TestNewQuietHandle_NoOp(t *testing.T) {
-	h := newQuietHandle("text", "developer")
+	h := newQuietHandle("text", "developer", false)
 	if h.fn != nil {
 		t.Error("expected no-op handle for text/developer")
 	}
@@ -45,7 +46,7 @@ func TestNewQuietHandle_NoOp(t *testing.T) {
 }
 
 func TestNewQuietHandle_JSON(t *testing.T) {
-	h := newQuietHandle("json", "developer")
+	h := newQuietHandle("json", "developer", false)
 	if h.fn == nil {
 		t.Error("expected fn to be set for json format")
 	}
@@ -56,9 +57,34 @@ func TestNewQuietHandle_JSON(t *testing.T) {
 }
 
 func TestNewQuietHandle_Agent(t *testing.T) {
-	h := newQuietHandle("text", "agent")
+	h := newQuietHandle("text", "agent", false)
 	if h.fn == nil {
 		t.Error("expected fn to be set for agent audience")
+	}
+	h.Restore()
+}
+
+func TestNewQuietHandle_JSONProgressStderr(t *testing.T) {
+	h := newQuietHandle("json", "developer", true)
+	if h.fn == nil {
+		t.Fatal("expected fn to be set for json+progress-stderr")
+	}
+	if stdout.Writer() != os.Stderr {
+		t.Errorf("expected Writer to be os.Stderr, got %v", stdout.Writer())
+	}
+	h.Restore()
+	if stdout.Writer() != os.Stdout {
+		t.Error("expected Writer to be os.Stdout after Restore")
+	}
+}
+
+func TestNewQuietHandle_TextProgressStderrNoOp(t *testing.T) {
+	// --progress-stderr is a no-op outside of JSON mode: text output already
+	// prints progress on stdout, so redirecting it would move the user's
+	// review lines to a different stream.
+	h := newQuietHandle("text", "developer", true)
+	if h.fn != nil {
+		t.Error("expected no-op handle for text+progress-stderr")
 	}
 	h.Restore()
 }
@@ -69,7 +95,7 @@ func TestQuietHandle_NilReceiver(t *testing.T) {
 }
 
 func TestQuietHandle_IdempotentRestore(t *testing.T) {
-	h := newQuietHandle("json", "developer")
+	h := newQuietHandle("json", "developer", false)
 	h.Restore()
 	h.Restore()
 	if h.fn != nil {

@@ -28,9 +28,22 @@ func Writer() io.Writer {
 // deferred in the same goroutine. Never call Quiet from multiple goroutines
 // concurrently — it is not designed for nested or parallel silencing.
 func Quiet() func() {
+	return Redirect(io.Discard)
+}
+
+// Redirect swaps the progress writer for target and returns a cleanup
+// function that restores the previous one. Callers use this to divert
+// progress logs (e.g. to os.Stderr) instead of discarding them, so a
+// consumer that parses JSON on stdout can still surface progress in
+// real time.
+//
+// The same threading rules as Quiet apply: call only from the main
+// goroutine before spawning writers, and defer its returned restore in
+// the same goroutine.
+func Redirect(target io.Writer) func() {
 	mu.Lock()
 	old := w
-	w = io.Discard
+	w = target
 	mu.Unlock()
 	return func() {
 		mu.Lock()

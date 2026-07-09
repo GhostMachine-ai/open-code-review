@@ -152,7 +152,7 @@ func TestParseScanFlags_RejectsNegativeMaxTokensBudget(t *testing.T) {
 }
 
 func TestParseScanFlags_BooleanFlags(t *testing.T) {
-	opts, err := parseScanFlags([]string{"--no-plan", "--no-dedup", "--no-summary", "--preview"})
+	opts, err := parseScanFlags([]string{"--no-plan", "--no-dedup", "--no-summary", "--preview", "--progress-stderr"})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -167,6 +167,9 @@ func TestParseScanFlags_BooleanFlags(t *testing.T) {
 	}
 	if !opts.preview {
 		t.Error("preview should be true")
+	}
+	if !opts.progressStderr {
+		t.Error("progressStderr should be true")
 	}
 }
 
