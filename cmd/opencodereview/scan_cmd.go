@@ -41,6 +41,7 @@ type scanOptions struct {
 	batch           string // --batch: override scan template's BATCH_STRATEGY
 	maxTokensBudget int    // --max-tokens-budget: cap total token usage; 0 = unlimited
 	model           string // --model: override resolved LLM model for this scan
+	progressStderr  bool   // --progress-stderr: route progress logs to stderr in JSON mode
 	showHelp        bool
 }
 
@@ -67,6 +68,7 @@ func parseScanFlags(args []string) (scanOptions, error) {
 	a.StringVar(&opts.batch, "batch", "", "override BATCH_STRATEGY from scan template: none | by-language | by-directory")
 	a.IntVar(&opts.maxTokensBudget, "max-tokens-budget", 0, "cap total token usage (input+output); dispatch stops once exceeded (0 = unlimited)")
 	a.StringVar(&opts.model, "model", "", "override LLM model for this scan (e.g., claude-opus-4-6)")
+	a.BoolVar(&opts.progressStderr, "progress-stderr", false, "in --format=json mode, write progress logs to stderr instead of silencing them")
 
 	if err := a.Parse(args); err != nil {
 		return opts, fmt.Errorf("parse flags: %w", err)
@@ -205,7 +207,7 @@ func runScan(args []string) error {
 		SkipSummary:           opts.noSummary,
 	})
 
-	q := newQuietHandle(opts.outputFormat, opts.audience)
+	q := newQuietHandle(opts.outputFormat, opts.audience, opts.progressStderr)
 	defer q.Restore()
 
 	ctx, span := telemetry.StartSpan(context.Background(), "scan.run")
@@ -292,6 +294,7 @@ Flags:
   --max-git-procs int     max concurrent git subprocesses (default 16)
   --max-tools int         max tool call rounds per file; only takes effect when greater than template default
   -p, --preview           preview which files will be scanned without running the LLM
+  --progress-stderr       with --format=json, write progress logs to stderr (default: silenced)
   --repo string           root directory of the git repository (default: current dir)
   --rule string           path to JSON file with system review rules
   --timeout int           concurrent task timeout in minutes (default 10)

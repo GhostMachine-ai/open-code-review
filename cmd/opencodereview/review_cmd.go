@@ -112,7 +112,7 @@ func runReview(args []string) error {
 
 	// Silence progress output during execution; restored before the trace
 	// summary in agent-text mode (and on function exit otherwise).
-	q := newQuietHandle(opts.outputFormat, opts.audience)
+	q := newQuietHandle(opts.outputFormat, opts.audience, opts.progressStderr)
 	defer q.Restore()
 
 	ctx, span := telemetry.StartSpan(context.Background(), "review.run")

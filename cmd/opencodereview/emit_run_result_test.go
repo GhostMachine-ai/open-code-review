@@ -134,7 +134,7 @@ func TestEmitRunResult_TextWithProjectSummary(t *testing.T) {
 
 func TestEmitRunResult_AgentTextRestoresQuiet(t *testing.T) {
 	ag := &mockResultProvider{filesReviewed: 1}
-	q := newQuietHandle("text", "agent")
+	q := newQuietHandle("text", "agent", false)
 	got := captureStdout(t, func() {
 		err := emitRunResult(context.Background(), ag, nil, time.Now(), "text", "agent", q)
 		if err != nil {
@@ -154,7 +154,7 @@ func TestEmitRunResult_AgentJSONDoesNotRestore(t *testing.T) {
 		outputTokens:  5,
 		totalTokens:   15,
 	}
-	q := newQuietHandle("json", "agent")
+	q := newQuietHandle("json", "agent", false)
 	got := captureStdout(t, func() {
 		err := emitRunResult(context.Background(), ag, nil, time.Now(), "json", "agent", q)
 		if err != nil {

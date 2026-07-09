@@ -88,6 +88,26 @@ func TestParseReviewFlags_ToWithoutFrom(t *testing.T) {
 	}
 }
 
+func TestParseReviewFlags_ProgressStderrDefault(t *testing.T) {
+	opts, err := parseReviewFlags(nil)
+	if err != nil {
+		t.Fatalf("parseReviewFlags: %v", err)
+	}
+	if opts.progressStderr {
+		t.Error("expected progressStderr to default to false")
+	}
+}
+
+func TestParseReviewFlags_ProgressStderrEnabled(t *testing.T) {
+	opts, err := parseReviewFlags([]string{"--progress-stderr"})
+	if err != nil {
+		t.Fatalf("parseReviewFlags: %v", err)
+	}
+	if !opts.progressStderr {
+		t.Error("expected progressStderr=true when --progress-stderr is passed")
+	}
+}
+
 func TestParseReviewFlags_Help(t *testing.T) {
 	opts, err := parseReviewFlags([]string{"-h"})
 	if err != nil {

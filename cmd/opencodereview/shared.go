@@ -217,9 +217,19 @@ type quietHandle struct {
 
 // newQuietHandle silences stdout when outputFormat=="json" or
 // audience=="agent"; otherwise the returned handle is a no-op restorer.
-func newQuietHandle(outputFormat, audience string) *quietHandle {
+//
+// progressStderr, when true, routes progress logs to os.Stderr instead
+// of discarding them. It only takes effect in the JSON-format branch —
+// the JSON payload continues to be written to os.Stdout, and consumers
+// like the VS Code extension can tail stderr for real-time progress.
+// The agent-text branch is unaffected because that audience already
+// prints its trace summary to stdout after Restore.
+func newQuietHandle(outputFormat, audience string, progressStderr bool) *quietHandle {
 	h := &quietHandle{}
-	if outputFormat == "json" || audience == "agent" {
+	switch {
+	case outputFormat == "json" && progressStderr:
+		h.fn = stdout.Redirect(os.Stderr)
+	case outputFormat == "json" || audience == "agent":
 		h.fn = stdout.Quiet()
 	}
 	return h
